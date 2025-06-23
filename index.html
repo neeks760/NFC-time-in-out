@@ -38,4 +38,23 @@
                         const now = new Date().toLocaleString();
                         let logs = JSON.parse(localStorage.getItem('clockInLogs')) || [];
                         logs.push({ time: now, lat: 'N/A', lon: 'N/A' });
-                        localStorage.setItem('clockInLogs',
+                        localStorage.setItem('clockInLogs', JSON.stringify(logs));
+
+                        const logDiv = document.getElementById('log');
+                        logDiv.innerHTML = 'Log of clock-ins:<br>';
+                        logs.forEach(entry => {
+                            logDiv.innerHTML += `${entry.time} - Lat: N/A, Lon: N/A<br>`;
+                        });
+                        console.log('Geolocation error: ' + error.message);
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+        }
+
+        // Run on page load
+        getLocation();
+    </script>
+</body>
+</html>
