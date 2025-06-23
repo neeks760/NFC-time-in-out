@@ -5,22 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clock In</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-        }
-        p {
-            font-size: 24px;
-            text-align: center;
-        }
+        body { font-family: sans-serif; text-align: center; margin-top: 50px; }
+        #log { margin-top: 20px; color: #666; font-size: 0.9em; }
     </style>
 </head>
 <body>
+    <h1>Clock In</h1>
     <p>Thank you for clocking in. Your time is logged. You may close the browser.</p>
+    <div id="log">Log of clock-ins:<br></div>
+
+    <script>
+        // Get current time
+        const now = new Date().toLocaleString();
+
+        // Load existing logs from localStorage
+        let logs = JSON.parse(localStorage.getItem('clockInLogs')) || [];
+
+        // Add new log entry
+        logs.push(now);
+        localStorage.setItem('clockInLogs', JSON.stringify(logs));
+
+        // Display logs
+        const logDiv = document.getElementById('log');
+        logs.forEach(time => {
+            logDiv.innerHTML += `${time}<br>`;
+        });
+    </script>
 </body>
 </html>
