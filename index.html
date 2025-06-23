@@ -15,21 +15,27 @@
     <div id="log">Log of clock-ins:<br></div>
 
     <script>
-        // Get current time
-        const now = new Date().toLocaleString();
+        // Function to get location
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const now = new Date().toLocaleString();
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
 
-        // Load existing logs from localStorage
-        let logs = JSON.parse(localStorage.getItem('clockInLogs')) || [];
+                        let logs = JSON.parse(localStorage.getItem('clockInLogs')) || [];
+                        logs.push({ time: now, lat: lat, lon: lon });
+                        localStorage.setItem('clockInLogs', JSON.stringify(logs));
 
-        // Add new log entry
-        logs.push(now);
-        localStorage.setItem('clockInLogs', JSON.stringify(logs));
-
-        // Display logs
-        const logDiv = document.getElementById('log');
-        logs.forEach(time => {
-            logDiv.innerHTML += `${time}<br>`;
-        });
-    </script>
-</body>
-</html>
+                        const logDiv = document.getElementById('log');
+                        logDiv.innerHTML = 'Log of clock-ins:<br>';
+                        logs.forEach(entry => {
+                            logDiv.innerHTML += `${entry.time} - Lat: ${entry.lat}, Lon: ${entry.lon}<br>`;
+                        });
+                    },
+                    (error) => {
+                        const now = new Date().toLocaleString();
+                        let logs = JSON.parse(localStorage.getItem('clockInLogs')) || [];
+                        logs.push({ time: now, lat: 'N/A', lon: 'N/A' });
+                        localStorage.setItem('clockInLogs',
